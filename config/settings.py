@@ -67,7 +67,7 @@ DATABASES = {
     'default': dj_database_url.config(
             default='postgresql://postgres:postgres@localhost:5432/financedb',
             conn_max_age=600
-    )  
+    )
 }
 
 STATIC_URL = 'static/'

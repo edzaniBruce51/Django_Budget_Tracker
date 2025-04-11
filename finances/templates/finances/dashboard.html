@@ -2,6 +2,10 @@
 
 {% block title %}Dashboard - Budget Tracker{% endblock %}
 
+{% block extra_js %}
+<script src="/static/js/dashboard-charts.js"></script>
+{% endblock %}
+
 {% block content %}
 <style>
     .dashboard-container {
@@ -16,7 +20,11 @@
             grid-template-columns: repeat(2, 1fr);
         }
     }
-
+    .chart-container {
+        height: 300px;
+        position: relative;
+        margin-bottom: 1rem;
+    }
     .dashboard-card {
         background: white;
         padding: 1.5rem;
@@ -46,7 +54,7 @@
     .list-item:last-child {
         border-bottom: none;
     }
-    
+
 </style>
 
 <div class="dashboard-container">
@@ -79,6 +87,11 @@
     <div class="dashboard-card">
         <h2 class="card-title">Expenses by Category</h2>
         {% if expenses_by_category %}
+            <div class="chart-container">
+                <canvas id="expenseCategoryChart" 
+                        data-categories='{{ category_names_json }}' 
+                        data-amounts='{{ category_amounts_json }}'></canvas>
+            </div>
             {% for item in expenses_by_category %}
                 <div class="list-item">
                     <span>{{ item.category__name }}</span>
@@ -94,6 +107,12 @@
     <div class="dashboard-card">
         <h2 class="card-title">Active Budgets</h2>
         {% if active_budgets %}
+            <div class="chart-container">
+                <canvas id="budgetProgressChart" 
+                        data-budget-names='{{ budget_names_json }}' 
+                        data-budget-amounts='{{ budget_amounts_json }}' 
+                        data-spent-amounts='{{ spent_amounts_json }}'></canvas>
+            </div>
             {% for budget in active_budgets %}
                 <div class="list-item">
                     <span>{{ budget.name }}</span>
@@ -104,6 +123,17 @@
             <p>No active budgets</p>
         {% endif %}
     </div>
+    
+    <!-- Expense Trend Chart -->
+    <div class="dashboard-card" style="grid-column: 1 / -1;"> <!-- Full width -->
+        <h2 class="card-title">Expense Trend (Last 30 Days)</h2>
+        <div class="chart-container">
+            <canvas id="expenseTrendChart" 
+                    data-dates='{{ trend_dates_json }}' 
+                    data-amounts='{{ trend_amounts_json }}'></canvas>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
 

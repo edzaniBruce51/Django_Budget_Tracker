@@ -7,6 +7,7 @@ from .models import Expense, Budget, Category
 from .forms import ExpenseForm, BudgetForm, CategoryForm
 from datetime import datetime, timedelta
 from django.db.models import Sum
+import json
 
 @login_required
 def dashboard(request):
@@ -14,10 +15,49 @@ def dashboard(request):
     month_start = today.replace(day=1)
     month_end = (month_start + timedelta(days=32)).replace(day=1) - timedelta(days=1)
 
+    # Get last 30 days for trend chart
+    thirty_days_ago = today - timedelta(days=30)
+
     monthly_expenses = Expense.objects.filter(
         user=request.user,
         date__range=[month_start, month_end]
     )
+
+    # Get active budgets
+    active_budgets = Budget.objects.filter(
+        user=request.user,
+        start_date__lte=today,
+        end_date__gte=today
+    )
+
+    # Prepare budget data for chart
+    budget_names = []
+    budget_amounts = []
+    spent_amounts = []
+    
+    for budget in active_budgets:
+        budget_names.append(budget.name)
+        budget_amounts.append(float(budget.amount))
+        spent_amounts.append(float(budget.get_spent_amount()))
+    
+    # Prepare category data for chart
+    expenses_by_category = monthly_expenses.values('category__name').annotate(
+        total=Sum('amount')
+    ).order_by('-total')
+    
+    category_names = [item['category__name'] for item in expenses_by_category]
+    category_amounts = [float(item['total']) for item in expenses_by_category]
+    
+    # Prepare expense trend data
+    expense_trend = Expense.objects.filter(
+        user=request.user,
+        date__range=[thirty_days_ago, today]
+    ).values('date').annotate(
+        daily_total=Sum('amount')
+    ).order_by('date')
+    
+    trend_dates = [item['date'].strftime('%Y-%m-%d') for item in expense_trend]
+    trend_amounts = [float(item['daily_total']) for item in expense_trend]
 
     context = {
         'total_expenses': monthly_expenses.aggregate(total=Sum('amount'))['total'] or 0,
@@ -30,6 +70,15 @@ def dashboard(request):
             total=Sum('amount')
         ).order_by('-total'),
         'recent_expenses': monthly_expenses.order_by('-date')[:5],
+
+        # Chart data
+        'budget_names_json': json.dumps(budget_names),
+        'budget_amounts_json': json.dumps(budget_amounts),
+        'spent_amounts_json': json.dumps(spent_amounts),
+        'category_names_json': json.dumps(category_names),
+        'category_amounts_json': json.dumps(category_amounts),
+        'trend_dates_json': json.dumps(trend_dates),
+        'trend_amounts_json': json.dumps(trend_amounts),
     }
     return render(request, 'finances/dashboard.html', context)
 
@@ -127,3 +176,4 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'finances/register.html', {'form': form})
+
