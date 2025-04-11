@@ -14,7 +14,7 @@ A Django-based personal budget tracking system that helps users track expenses, 
 
 - Django 5.2
 - SQLite database (configurable for PostgreSQL)
-- Chart.js for data visualization # Removed
+- Chart.js for data visualization 
 - Responsive CSS design
 
 ## Installation
