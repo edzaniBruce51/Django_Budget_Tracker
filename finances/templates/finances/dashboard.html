@@ -1,0 +1,118 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Dashboard - Budget Tracker{% endblock %}
+
+{% block content %}
+<style>
+    .dashboard-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .dashboard-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .dashboard-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+        margin: 0 0 1rem 0;
+        font-size: 1.25rem;
+        color: #333;
+    }
+
+    .amount {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #3949ab;
+    }
+
+    .list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .list-item:last-child {
+        border-bottom: none;
+    }
+    
+</style>
+
+<div class="dashboard-container">
+    <!-- Monthly Overview -->
+    <div class="dashboard-card">
+        <h2 class="card-title">Monthly Overview</h2>
+        <div class="amount">R{{ total_expenses|default:"0.00"|floatformat:2 }}</div>
+        <p>Total Expenses This Month</p>
+    </div>
+
+    <!-- Recent Expenses -->
+    <div class="dashboard-card">
+        <h2 class="card-title">Recent Expenses</h2>
+        {% if recent_expenses %}
+            {% for expense in recent_expenses %}
+                <div class="list-item">
+                    <div>
+                        <div>{{ expense.description }}</div>
+                        <small style="color: #666;">{{ expense.date|date:"M d, Y" }}</small>
+                    </div>
+                    <div>R{{ expense.amount|floatformat:2 }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No recent expenses</p>
+        {% endif %}
+    </div>
+
+    <!-- Category Summary -->
+    <div class="dashboard-card">
+        <h2 class="card-title">Expenses by Category</h2>
+        {% if expenses_by_category %}
+            {% for item in expenses_by_category %}
+                <div class="list-item">
+                    <span>{{ item.category__name }}</span>
+                    <span>R{{ item.total|default:"0"|floatformat:2 }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No category expenses</p>
+        {% endif %}
+    </div>
+
+    <!-- Active Budgets -->
+    <div class="dashboard-card">
+        <h2 class="card-title">Active Budgets</h2>
+        {% if active_budgets %}
+            {% for budget in active_budgets %}
+                <div class="list-item">
+                    <span>{{ budget.name }}</span>
+                    <span>R{{ budget.get_spent_amount|default:"0.00"|floatformat:2 }} / R{{ budget.amount|floatformat:2 }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No active budgets</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

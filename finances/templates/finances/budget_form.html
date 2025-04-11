@@ -1,0 +1,62 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Add Budget - Budget Tracker{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6 max-w-md mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Add Budget</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+            <label for="{{ form.name.id_for_label }}" class="block text-gray-700 font-medium mb-2">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.name.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.amount.id_for_label }}" class="block text-gray-700 font-medium mb-2">Amount</label>
+            {{ form.amount }}
+            {% if form.amount.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.amount.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.start_date.id_for_label }}" class="block text-gray-700 font-medium mb-2">Start Date</label>
+            {{ form.start_date }}
+            {% if form.start_date.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.start_date.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.end_date.id_for_label }}" class="block text-gray-700 font-medium mb-2">End Date</label>
+            {{ form.end_date }}
+            {% if form.end_date.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.end_date.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="mb-6">
+            <label for="{{ form.category.id_for_label }}" class="block text-gray-700 font-medium mb-2">Category</label>
+            {{ form.category }}
+            {% if form.category.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.category.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="flex justify-between">
+            <a href="{% url 'finances:budget_list' %}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">
+                Cancel
+            </a>
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500">
+                Save
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

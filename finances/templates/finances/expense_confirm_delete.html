@@ -1,0 +1,23 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Delete Expense - Budget Tracker{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6 max-w-md mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Delete Expense</h1>
+    
+    <p class="mb-6 text-gray-700">Are you sure you want to delete the expense "{{ expense.description }}" for ${{ expense.amount|floatformat:2 }}?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex justify-between">
+            <a href="{% url 'finances:expense_list' %}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400">
+                Cancel
+            </a>
+            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                Delete
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

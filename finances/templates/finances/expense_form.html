@@ -1,0 +1,35 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}
+    {% if expense %}Edit Expense{% else %}Add Expense{% endif %} - Budget Tracker
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="header-section">
+        <h1 class="page-title">{% if expense %}Edit Expense{% else %}Add Expense{% endif %}</h1>
+    </div>
+    
+    <div class="form-container">
+        <form method="post" class="form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ field.label }}
+                        {% if field.name == 'amount' %}(R){% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error-message">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="add-button">
+                {% if expense %}Update{% else %}Add{% endif %} Expense
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

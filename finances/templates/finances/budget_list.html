@@ -1,0 +1,150 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Budgets - Budget Tracker{% endblock %}
+
+{% block content %}
+<style>
+    .budget-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin: 2rem auto;
+        max-width: 1200px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        color: #2d3748;
+        font-weight: 700;
+    }
+
+    .add-button {
+        background-color: #4f46e5;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+    .add-button:hover {
+        background-color: #4338ca;
+    }
+
+    .budget-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 1rem;
+    }
+
+    .budget-table th {
+        background-color: #f8fafc;
+        padding: 1.25rem 1rem;
+        font-size: 1.1rem;
+        color: #4a5568;
+        font-weight: 600;
+        text-align: left;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .budget-table td {
+        padding: 1.5rem 1rem;
+        font-size: 1.1rem;
+        background-color: #f8fafc;
+    }
+
+    .budget-table tr:hover td {
+        background-color: #edf2f7;
+        transition: background-color 0.3s;
+    }
+
+    .budget-name {
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    .category-cell {
+        color: #4a5568;
+    }
+
+    .amount-cell {
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .period-cell {
+        color: #4a5568;
+        font-size: 0.95rem;
+    }
+
+    .spent-cell {
+        color: #e53e3e;
+        font-weight: 600;
+    }
+
+    .remaining-cell {
+        color: #2f855a;
+        font-weight: 600;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 3rem;
+        color: #4a5568;
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="budget-container">
+    <div class="header-section">
+        <h1 class="page-title">My Budgets</h1>
+        <a href="{% url 'finances:budget_create' %}" class="add-button">Add Budget</a>
+    </div>
+
+    {% if budgets %}
+        <div class="table-responsive">
+            <table class="budget-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Period</th>
+                        <th>Spent</th>
+                        <th>Remaining</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for budget in budgets %}
+                        <tr>
+                            <td class="budget-name">{{ budget.name }}</td>
+                            <td class="category-cell">{{ budget.category.name }}</td>
+                            <td class="amount-cell">R{{ budget.amount|floatformat:2 }}</td>
+                            <td class="period-cell">
+                                {{ budget.start_date|date:"M d, Y" }} - {{ budget.end_date|date:"M d, Y" }}
+                            </td>
+                            <td class="spent-cell">R{{ budget.get_spent_amount|floatformat:2 }}</td>
+                            <td class="remaining-cell">R{{ budget.get_remaining_amount|floatformat:2 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-message">No budgets found. Add your first budget!</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

@@ -1,0 +1,32 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Categories - Budget Tracker{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Categories</h1>
+        <a href="{% url 'finances:category_create' %}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500">
+            Add Category
+        </a>
+    </div>
+
+    {% if categories %}
+        <div class="grid gap-4">
+            {% for category in categories %}
+                <div class="border p-4 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-semibold">{{ category.name }}</h2>
+                        <!-- Edit/Delete functionality removed for simplification -->
+                    </div>
+                    {% if category.description %}
+                        <p class="text-gray-600 mt-2">{{ category.description }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-500 text-center py-4">No categories found. Add your first category!</p>
+    {% endif %}
+</div>
+{% endblock %}
