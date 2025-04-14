@@ -19,7 +19,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     f'localhost:{PORT}',
-    f'127.0.0.1:{PORT}'
+    f'127.0.0.1:{PORT}',
+    '.onrender.com'  # Allow Render domains
 ]
 
 INSTALLED_APPS = [

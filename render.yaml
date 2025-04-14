@@ -10,7 +10,8 @@ services:
     name: finances
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "python -m gunicorn config.wsgi:application -k uvicorn.workers.UvicornWorker"
+    # This is the key change - explicitly telling gunicorn where to find our WSGI application
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT config.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -20,3 +21,7 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: DJANGO_DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
