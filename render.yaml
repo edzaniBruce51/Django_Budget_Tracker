@@ -9,8 +9,8 @@ services:
     plan: free
     name: finances
     runtime: python
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn config.wsgi:application"
+    buildCommand: "chmod +x build.sh && ./build.sh"
+    startCommand: "gunicorn --chdir . config.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -24,3 +24,5 @@ services:
         value: False
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
