@@ -26,15 +26,15 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initializeExpenseCategoryChart() {
     const ctx = document.getElementById('expenseCategoryChart').getContext('2d');
-    
+
     // Get data from the data attributes
     const chartElement = document.getElementById('expenseCategoryChart');
     const categories = JSON.parse(chartElement.dataset.categories || '[]');
     const amounts = JSON.parse(chartElement.dataset.amounts || '[]');
-    
+
     // Generate colors for each category
     const colors = generateColors(categories.length);
-    
+
     new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -66,13 +66,13 @@ function initializeExpenseCategoryChart() {
  */
 function initializeBudgetProgressChart() {
     const ctx = document.getElementById('budgetProgressChart').getContext('2d');
-    
+
     // Get data from the data attributes
     const chartElement = document.getElementById('budgetProgressChart');
     const budgetNames = JSON.parse(chartElement.dataset.budgetNames || '[]');
     const budgetAmounts = JSON.parse(chartElement.dataset.budgetAmounts || '[]');
     const spentAmounts = JSON.parse(chartElement.dataset.spentAmounts || '[]');
-    
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -121,12 +121,12 @@ function initializeBudgetProgressChart() {
  */
 function initializeExpenseTrendChart() {
     const ctx = document.getElementById('expenseTrendChart').getContext('2d');
-    
+
     // Get data from the data attributes
     const chartElement = document.getElementById('expenseTrendChart');
     const dates = JSON.parse(chartElement.dataset.dates || '[]');
     const amounts = JSON.parse(chartElement.dataset.amounts || '[]');
-    
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -185,7 +185,7 @@ function generateColors(count) {
         'rgba(255, 99, 255, 0.7)',   // Pink
         'rgba(99, 255, 132, 0.7)'    // Light Green
     ];
-    
+
     // If we need more colors than in our predefined array, generate them
     if (count > colors.length) {
         for (let i = colors.length; i < count; i++) {
@@ -195,6 +195,6 @@ function generateColors(count) {
             colors.push(`rgba(${r}, ${g}, ${b}, 0.7)`);
         }
     }
-    
+
     return colors.slice(0, count);
 }

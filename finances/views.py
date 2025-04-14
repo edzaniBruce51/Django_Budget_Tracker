@@ -34,20 +34,20 @@ def dashboard(request):
     budget_names = []
     budget_amounts = []
     spent_amounts = []
-    
+
     for budget in active_budgets:
         budget_names.append(budget.name)
         budget_amounts.append(float(budget.amount))
         spent_amounts.append(float(budget.get_spent_amount()))
-    
+
     # Prepare category data for chart
     expenses_by_category = monthly_expenses.values('category__name').annotate(
         total=Sum('amount')
     ).order_by('-total')
-    
+
     category_names = [item['category__name'] for item in expenses_by_category]
     category_amounts = [float(item['total']) for item in expenses_by_category]
-    
+
     # Prepare expense trend data
     expense_trend = Expense.objects.filter(
         user=request.user,
@@ -55,23 +55,23 @@ def dashboard(request):
     ).values('date').annotate(
         daily_total=Sum('amount')
     ).order_by('date')
-    
+
     trend_dates = [item['date'].strftime('%Y-%m-%d') for item in expense_trend]
     trend_amounts = [float(item['daily_total']) for item in expense_trend]
 
+    # Add some debug printing
+    print("Category names:", category_names)
+    print("Category amounts:", category_amounts)
+    print("Budget names:", budget_names)
+    print("Budget amounts:", budget_amounts)
+    print("Trend dates:", trend_dates)
+    print("Trend amounts:", trend_amounts)
+
     context = {
         'total_expenses': monthly_expenses.aggregate(total=Sum('amount'))['total'] or 0,
-        'active_budgets': Budget.objects.filter(
-            user=request.user,
-            start_date__lte=today,
-            end_date__gte=today
-        ),
-        'expenses_by_category': monthly_expenses.values('category__name').annotate(
-            total=Sum('amount')
-        ).order_by('-total'),
+        'active_budgets': active_budgets,
+        'expenses_by_category': expenses_by_category,
         'recent_expenses': monthly_expenses.order_by('-date')[:5],
-
-        # Chart data
         'budget_names_json': json.dumps(budget_names),
         'budget_amounts_json': json.dumps(budget_amounts),
         'spent_amounts_json': json.dumps(spent_amounts),

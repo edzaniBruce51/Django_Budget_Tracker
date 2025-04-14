@@ -1,9 +1,10 @@
 {% extends 'finances/base.html' %}
+{% load static %}
 
 {% block title %}Dashboard - Budget Tracker{% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/dashboard-charts.js"></script>
+<script src="{% static 'js/dashboard-chart.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -88,8 +89,8 @@
         <h2 class="card-title">Expenses by Category</h2>
         {% if expenses_by_category %}
             <div class="chart-container">
-                <canvas id="expenseCategoryChart" 
-                        data-categories='{{ category_names_json }}' 
+                <canvas id="expenseCategoryChart"
+                        data-categories='{{ category_names_json }}'
                         data-amounts='{{ category_amounts_json }}'></canvas>
             </div>
             {% for item in expenses_by_category %}
@@ -108,9 +109,9 @@
         <h2 class="card-title">Active Budgets</h2>
         {% if active_budgets %}
             <div class="chart-container">
-                <canvas id="budgetProgressChart" 
-                        data-budget-names='{{ budget_names_json }}' 
-                        data-budget-amounts='{{ budget_amounts_json }}' 
+                <canvas id="budgetProgressChart"
+                        data-budget-names='{{ budget_names_json }}'
+                        data-budget-amounts='{{ budget_amounts_json }}'
                         data-spent-amounts='{{ spent_amounts_json }}'></canvas>
             </div>
             {% for budget in active_budgets %}
@@ -123,19 +124,21 @@
             <p>No active budgets</p>
         {% endif %}
     </div>
-    
+
     <!-- Expense Trend Chart -->
     <div class="dashboard-card" style="grid-column: 1 / -1;"> <!-- Full width -->
         <h2 class="card-title">Expense Trend (Last 30 Days)</h2>
         <div class="chart-container">
-            <canvas id="expenseTrendChart" 
-                    data-dates='{{ trend_dates_json }}' 
+            <canvas id="expenseTrendChart"
+                    data-dates='{{ trend_dates_json }}'
                     data-amounts='{{ trend_amounts_json }}'></canvas>
         </div>
     </div>
 
 </div>
 {% endblock %}
+
+
 
 
 
