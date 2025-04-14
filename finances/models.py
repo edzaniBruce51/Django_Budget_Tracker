@@ -7,7 +7,7 @@ class Category(models.Model):
     Each category belongs to a specific user for data isolation."""
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -28,7 +28,7 @@ class Budget(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ['-start_date']
@@ -60,7 +60,7 @@ class Expense(models.Model):
     date = models.DateField()
     description = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ['-date']
