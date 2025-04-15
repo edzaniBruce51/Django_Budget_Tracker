@@ -26,5 +26,5 @@ services:
         value: 3.11.0
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings
-      - key: PYTHONPATH
-        value: /opt/render/project/src
+      - key: PORT
+        value: 8000
