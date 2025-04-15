@@ -19,7 +19,9 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     f'localhost:{PORT}',
-    f'127.0.0.1:{PORT}'
+    f'127.0.0.1:{PORT}',
+    'django-budget-tracker.onrender.com',
+    '.onrender.com',  #In case I decide to rename my service I will need this line since it allows all subdomains of onrender.com
 ]
 
 INSTALLED_APPS = [
