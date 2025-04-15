@@ -8,11 +8,12 @@ pip install -r requirements.txt
 # Collect static files
 python manage.py collectstatic --no-input
 
-# Apply database migrations - run auth migrations first
-python manage.py migrate auth --fake-initial
-python manage.py migrate contenttypes --fake-initial
-python manage.py migrate admin --fake-initial
-python manage.py migrate sessions --fake-initial
+# Create data directory for SQLite database
+mkdir -p data
+chmod 777 data
 
-# Then run all migrations
+# Apply database migrations
 python manage.py migrate
+
+# Create superuser from environment variables if provided
+python manage.py create_superuser_from_env

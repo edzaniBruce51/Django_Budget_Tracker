@@ -65,26 +65,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-    # Add this to ensure PostgreSQL creates schemas properly
-    DATABASES['default']['OPTIONS'] = {
-        'options': '-c search_path=public'
-    }
-else:
+# Always use SQLite for simplicity
+# For development, store in the project directory
+# For production (Render), store in a location that persists between deployments
+if not DEBUG:  # In production (Render)
+    # Create a directory that will persist between deployments
+    sqlite_dir = os.path.join(BASE_DIR, 'data')
+    os.makedirs(sqlite_dir, exist_ok=True)
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': os.path.join(sqlite_dir, 'db.sqlite3'),
         }
     }
+
 
 
 STATIC_URL = 'static/'

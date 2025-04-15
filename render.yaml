@@ -1,8 +1,3 @@
-databases:
-  - name: financedb
-    plan: free
-    databaseName: financedb
-    user: finances
 
 services:
   - type: web
@@ -12,10 +7,6 @@ services:
     buildCommand: "chmod +x build.sh && ./build.sh"
     startCommand: "gunicorn --chdir /opt/render/project/src config.wsgi:application"
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: financedb
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
@@ -28,3 +19,9 @@ services:
         value: config.settings
       - key: PORT
         value: 8000
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@example.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        generateValue: true
