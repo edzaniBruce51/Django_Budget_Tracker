@@ -13,7 +13,7 @@ A Django-based personal budget tracking system that helps users track expenses, 
 ## Technical Stack
 
 - Django 5.2
-- SQLite database (configurable for PostgreSQL)
+- SQLite database | choose this both in development and in deployment because it doesn't need too  much configurations to be done and my application is not going to scale and also it doesn't handle too much traffic.
 - Chart.js for data visualization 
 - Responsive CSS design
 
