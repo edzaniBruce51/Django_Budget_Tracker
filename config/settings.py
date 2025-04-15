@@ -74,6 +74,10 @@ if DATABASE_URL:
             conn_health_checks=True,
         )
     }
+    # Add this to ensure PostgreSQL creates schemas properly
+    DATABASES['default']['OPTIONS'] = {
+        'options': '-c search_path=public'
+    }
 else:
     DATABASES = {
         'default': {
