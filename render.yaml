@@ -5,7 +5,7 @@ services:
     name: finances
     runtime: python
     buildCommand: "chmod +x build.sh && ./build.sh"
-    startCommand: "gunicorn --chdir /opt/render/project/src config.wsgi:application"
+    startCommand: "gunicorn --chdir /opt/render/project/src config.wsgi:application --bind 0.0.0.0:10000"
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -18,7 +18,7 @@ services:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings
       - key: PORT
-        value: 8000
+        value: 10000
       - key: DJANGO_SUPERUSER_USERNAME
         value: admin
       - key: DJANGO_SUPERUSER_EMAIL
