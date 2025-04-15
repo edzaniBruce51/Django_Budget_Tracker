@@ -10,7 +10,7 @@ services:
     name: finances
     runtime: python
     buildCommand: "chmod +x build.sh && ./build.sh"
-    startCommand: "gunicorn finance_tracker.config.wsgi:application"
+    startCommand: "cd /opt/render/project/src && gunicorn config.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -26,3 +26,5 @@ services:
         value: 3.11.0
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings
+      - key: PYTHONPATH
+        value: /opt/render/project/src
